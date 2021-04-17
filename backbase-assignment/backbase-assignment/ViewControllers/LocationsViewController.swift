@@ -33,6 +33,9 @@ class LocationsViewController: UITableViewController {
 
     private var locationsManager = LocationsManager()
 
+    private let searchQueue = DispatchQueue(label: "Search Queue", qos: .userInitiated)
+    private var searchWorkItem: DispatchWorkItem?
+
     init() {
         super.init(nibName: nil, bundle: nil)
 
@@ -93,18 +96,32 @@ extension LocationsViewController: UISearchBarDelegate { }
 
 extension LocationsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        if searchWorkItem != nil {
+            searchWorkItem?.cancel()
+            searchWorkItem = nil
+        }
+
         guard
             let searchText = searchController.searchBar.text,
             !searchText.isEmpty
         else { return }
 
-        let node = tree.search(searchText)
-        var results = tree.getReachingLocationsFromNode(node)
-        results.sort { $0.getDisplayName() < $1.getDisplayName() }
+        searchWorkItem = DispatchWorkItem {
+            let node = self.tree.search(searchText)
+            var results = self.tree.getReachingLocationsFromNode(node)
+            results.sort { $0.getDisplayName() < $1.getDisplayName() }
 
-        if let resultsController = searchController.searchResultsController as? LocationsSearchResultsController {
-            resultsController.results = results
+            DispatchQueue.main.async {
+                if let resultsController = self.searchController.searchResultsController as? LocationsSearchResultsController {
+                    resultsController.results = results
+                }
+            }
         }
+
+        // Offload searching to a background thread so we don't:
+        // * lock up the UI and,
+        // * we can cancel potentially expensive operations when they're no longer needed
+        searchQueue.async(execute: searchWorkItem!)
     }
 }
 

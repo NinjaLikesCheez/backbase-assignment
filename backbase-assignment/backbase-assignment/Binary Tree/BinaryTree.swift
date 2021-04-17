@@ -62,7 +62,7 @@ class SearchTree {
 
     public func getReachingTerminationNodes(_ node: Node, results: inout [Node]) {
         if node.isTerminationNode {
-            results.append(nodet)
+            results.append(node)
             return
         }
 
