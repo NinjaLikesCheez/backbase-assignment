@@ -10,9 +10,13 @@ import UIKit
 class LocationsViewController: UITableViewController {
     static private let reuseIdentifier = "\(String(describing: self))CellReuseIdentifier"
 
+    /// Responsible for controlling the search bar and dispatching requests to update the results
     private var searchController: UISearchController!
+
+    /// Shows the search results
     private let resultsController = LocationsSearchResultsController()
 
+    /// A loading view shown when initially processing data before we have anything to show the user
     private var loadingViewController: LoadingViewController? = {
         let loadingViewController = LoadingViewController()
         loadingViewController.modalTransitionStyle = .crossDissolve
@@ -20,6 +24,7 @@ class LocationsViewController: UITableViewController {
         return loadingViewController
     }()
 
+    /// The data models for this table view. Rebuilds the search tree when updated.
     private var locations: Locations = [] {
         didSet {
             tableView.reloadData()
@@ -45,11 +50,13 @@ class LocationsViewController: UITableViewController {
         }
     }
 
+    /// A binary search tree to optimize location searches
     private var tree = SearchTree()
 
-    private var locationsManager = LocationsManager()
-
+    /// A queue to run searches on (via the `searchWorkItem`)
     private let searchQueue = DispatchQueue(label: "Search Queue", qos: .userInitiated)
+
+    /// A work item that encapsulates a searching operation
     private var searchWorkItem: DispatchWorkItem?
 
     init() {
@@ -71,7 +78,7 @@ class LocationsViewController: UITableViewController {
             navigationController?.present(viewController, animated: true)
         }
 
-        locationsManager.getLocations {
+        LocationsManager().getLocations {
             self.locations = $0
         }
     }
@@ -119,6 +126,8 @@ extension LocationsViewController: UISearchBarDelegate { }
 
 extension LocationsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        // TODO: Ensure this does what I think it does - I can almost bet that cancel() doesn't _actually_ cancel
+        // Maybe NSOperationQueue is a better fit
         if searchWorkItem != nil {
             searchWorkItem?.cancel()
             searchWorkItem = nil
