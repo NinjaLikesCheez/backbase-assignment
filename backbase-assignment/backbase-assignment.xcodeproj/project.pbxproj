@@ -18,6 +18,7 @@
 		BCD162A3262AD821002D0B02 /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162A2262AD821002D0B02 /* Locations.swift */; };
 		BCD162AA262AD985002D0B02 /* LocationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162A9262AD985002D0B02 /* LocationsManager.swift */; };
 		BCD162B6262ADD35002D0B02 /* cities.json in Resources */ = {isa = PBXBuildFile; fileRef = BCD162B5262ADD35002D0B02 /* cities.json */; };
+		BCD162BB262ADFBF002D0B02 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162BA262ADFBF002D0B02 /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		BCD162A2262AD821002D0B02 /* Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locations.swift; sourceTree = "<group>"; };
 		BCD162A9262AD985002D0B02 /* LocationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsManager.swift; sourceTree = "<group>"; };
 		BCD162B5262ADD35002D0B02 /* cities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cities.json; sourceTree = "<group>"; };
+		BCD162BA262ADFBF002D0B02 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 			children = (
 				BCD16261262ACE1B002D0B02 /* LocationsViewController.swift */,
 				BCD16297262AD265002D0B02 /* LocationsSearchResultsController.swift */,
+				BCD162BA262ADFBF002D0B02 /* MapViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				BCD1625E262ACE1B002D0B02 /* AppDelegate.swift in Sources */,
 				BCD162A3262AD821002D0B02 /* Locations.swift in Sources */,
 				BCD16260262ACE1B002D0B02 /* SceneDelegate.swift in Sources */,
+				BCD162BB262ADFBF002D0B02 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

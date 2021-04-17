@@ -74,6 +74,11 @@ class LocationsViewController: UITableViewController {
         tableView.delegate = self
         tableView.dataSource = self
     }
+
+    private func deselectSelectedRow() {
+        guard let index = tableView.indexPathForSelectedRow else { return }
+        tableView.deselectRow(at: index, animated: true)
+    }
 }
 
 // MARK: - Searching Conformance
@@ -87,10 +92,49 @@ extension LocationsViewController: UISearchResultsUpdating {
 
 // MARK: - Table View Delegate Conformance
 extension LocationsViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        deselectSelectedRow()
+        let location = locations[indexPath.row]
 
+        let viewController = MapViewController(location)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 // MARK: - Table View DataSource Conformance
 extension LocationsViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        locations.count
+    }
 
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TODO: Extract to custom cell?
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: LocationsViewController.reuseIdentifier,
+            for: indexPath
+        )
+
+        let location = locations[indexPath.row]
+
+        let text = location.getDisplayName()
+        let secondaryText = location.getCoordinatesString()
+        let secondaryTextColor = UIColor.secondaryLabel
+
+        if #available(iOS 14.0, *) {
+            var configuration = cell.defaultContentConfiguration()
+            configuration.text = text
+            configuration.secondaryText = secondaryText
+            configuration.secondaryTextProperties.color = secondaryTextColor
+
+            cell.contentConfiguration = configuration
+        } else {
+            cell.textLabel?.text = text
+            cell.detailTextLabel?.text = secondaryText
+            cell.detailTextLabel?.textColor = secondaryTextColor
+        }
+
+        cell.accessoryType = .disclosureIndicator
+
+        return cell
+    }
 }
