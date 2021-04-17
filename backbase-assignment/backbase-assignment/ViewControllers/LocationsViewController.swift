@@ -30,7 +30,7 @@ class LocationsViewController: UITableViewController {
 
         navigationItem.largeTitleDisplayMode = .always
 
-        resultsController.tableView.delegate = self
+//        resultsController.tableView.delegate = self
 
     }
     
@@ -82,12 +82,22 @@ class LocationsViewController: UITableViewController {
 }
 
 // MARK: - Searching Conformance
-extension LocationsViewController: UISearchBarDelegate {
-
-}
+extension LocationsViewController: UISearchBarDelegate { }
 
 extension LocationsViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) { }
+    func updateSearchResults(for searchController: UISearchController) {
+        guard
+            let searchText = searchController.searchBar.text,
+            !searchText.isEmpty
+        else { return }
+
+        // TODO: Come up with a 'better than linear' search method :P 
+        let results = locations.filter { $0.getDisplayName().lowercased().hasPrefix(searchText.lowercased()) }
+
+        if let resultsController = searchController.searchResultsController as? LocationsSearchResultsController {
+            resultsController.results = results
+        }
+    }
 }
 
 // MARK: - Table View Delegate Conformance
