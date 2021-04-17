@@ -15,6 +15,9 @@
 		BCD16275262ACE1D002D0B02 /* backbase_assignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD16274262ACE1D002D0B02 /* backbase_assignmentTests.swift */; };
 		BCD16280262ACE1D002D0B02 /* backbase_assignmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1627F262ACE1D002D0B02 /* backbase_assignmentUITests.swift */; };
 		BCD16298262AD265002D0B02 /* LocationsSearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD16297262AD265002D0B02 /* LocationsSearchResultsController.swift */; };
+		BCD162A3262AD821002D0B02 /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162A2262AD821002D0B02 /* Locations.swift */; };
+		BCD162AA262AD985002D0B02 /* LocationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162A9262AD985002D0B02 /* LocationsManager.swift */; };
+		BCD162B6262ADD35002D0B02 /* cities.json in Resources */ = {isa = PBXBuildFile; fileRef = BCD162B5262ADD35002D0B02 /* cities.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		BCD1627F262ACE1D002D0B02 /* backbase_assignmentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = backbase_assignmentUITests.swift; sourceTree = "<group>"; };
 		BCD16281262ACE1D002D0B02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BCD16297262AD265002D0B02 /* LocationsSearchResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsSearchResultsController.swift; sourceTree = "<group>"; };
+		BCD162A2262AD821002D0B02 /* Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locations.swift; sourceTree = "<group>"; };
+		BCD162A9262AD985002D0B02 /* LocationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsManager.swift; sourceTree = "<group>"; };
+		BCD162B5262ADD35002D0B02 /* cities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cities.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +105,9 @@
 		BCD1625C262ACE1B002D0B02 /* backbase-assignment */ = {
 			isa = PBXGroup;
 			children = (
+				BCD162B4262ADD18002D0B02 /* Data */,
+				BCD162A8262AD96F002D0B02 /* Data Managers */,
+				BCD162A7262AD962002D0B02 /* Models */,
 				BCD16296262AD24F002D0B02 /* ViewControllers */,
 				BCD1625D262ACE1B002D0B02 /* AppDelegate.swift */,
 				BCD1625F262ACE1B002D0B02 /* SceneDelegate.swift */,
@@ -134,6 +143,30 @@
 				BCD16297262AD265002D0B02 /* LocationsSearchResultsController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		BCD162A7262AD962002D0B02 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BCD162A2262AD821002D0B02 /* Locations.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BCD162A8262AD96F002D0B02 /* Data Managers */ = {
+			isa = PBXGroup;
+			children = (
+				BCD162A9262AD985002D0B02 /* LocationsManager.swift */,
+			);
+			path = "Data Managers";
+			sourceTree = "<group>";
+		};
+		BCD162B4262ADD18002D0B02 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				BCD162B5262ADD35002D0B02 /* cities.json */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,6 +272,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCD162B6262ADD35002D0B02 /* cities.json in Resources */,
 				BCD1626A262ACE1D002D0B02 /* LaunchScreen.storyboard in Resources */,
 				BCD16267262ACE1D002D0B02 /* Assets.xcassets in Resources */,
 			);
@@ -267,7 +301,9 @@
 			files = (
 				BCD16262262ACE1B002D0B02 /* LocationsViewController.swift in Sources */,
 				BCD16298262AD265002D0B02 /* LocationsSearchResultsController.swift in Sources */,
+				BCD162AA262AD985002D0B02 /* LocationsManager.swift in Sources */,
 				BCD1625E262ACE1B002D0B02 /* AppDelegate.swift in Sources */,
+				BCD162A3262AD821002D0B02 /* Locations.swift in Sources */,
 				BCD16260262ACE1B002D0B02 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

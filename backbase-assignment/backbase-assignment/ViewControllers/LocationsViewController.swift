@@ -13,6 +13,16 @@ class LocationsViewController: UITableViewController {
     private var searchController: UISearchController!
     private let resultsController = LocationsSearchResultsController()
 
+    private var locations: Locations = [] {
+        didSet {
+            // TODO: Animate this
+            print("Setting locations")
+            tableView.reloadData()
+        }
+    }
+
+    private var locationsManager = LocationsManager()
+
     init() {
         super.init(nibName: nil, bundle: nil)
 
@@ -21,6 +31,7 @@ class LocationsViewController: UITableViewController {
         navigationItem.largeTitleDisplayMode = .always
 
         resultsController.tableView.delegate = self
+
     }
     
     required init?(coder: NSCoder) {
@@ -30,6 +41,9 @@ class LocationsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        locationsManager.getLocations {
+            self.locations = $0
+        }
     }
 
     override func loadView() {
