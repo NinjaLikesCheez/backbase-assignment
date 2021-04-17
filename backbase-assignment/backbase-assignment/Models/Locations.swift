@@ -40,7 +40,6 @@ struct Location: Codable {
     public func getKey() -> String {
         "\(name)\(country)"
             .lowercased()
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+            .filter { $0.isLetter || $0.isNumber }
     }
 }

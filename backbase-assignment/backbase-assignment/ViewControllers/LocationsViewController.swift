@@ -18,8 +18,18 @@ class LocationsViewController: UITableViewController {
             // TODO: Animate this
             print("Setting locations")
             tableView.reloadData()
+
+            let start = CFAbsoluteTimeGetCurrent()
+            tree = SearchTree()
+            locations.forEach { tree.insert($0) }
+            var count = 0
+            tree.countTree(tree.root, result: &count)
+            let diff = CFAbsoluteTimeGetCurrent() - start
+            print("Generated tree in: \(diff), count: \(count)")
         }
     }
+
+    private var tree = SearchTree()
 
     private var locationsManager = LocationsManager()
 
@@ -29,9 +39,6 @@ class LocationsViewController: UITableViewController {
         title = "Backbase"
 
         navigationItem.largeTitleDisplayMode = .always
-
-//        resultsController.tableView.delegate = self
-
     }
     
     required init?(coder: NSCoder) {
@@ -91,8 +98,9 @@ extension LocationsViewController: UISearchResultsUpdating {
             !searchText.isEmpty
         else { return }
 
-        // TODO: Come up with a 'better than linear' search method :P 
-        let results = locations.filter { $0.getDisplayName().lowercased().hasPrefix(searchText.lowercased()) }
+        let node = tree.search(searchText)
+        var results = tree.getReachingLocationsFromNode(node)
+        results.sort { $0.getDisplayName() < $1.getDisplayName() }
 
         if let resultsController = searchController.searchResultsController as? LocationsSearchResultsController {
             resultsController.results = results
