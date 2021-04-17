@@ -44,6 +44,19 @@ class MapViewController: UIViewController {
 
         mapView.setRegion(region, animated: true)
 
+        /*
+         The coordinates provided don't always line up well with the cities they represent
+         so while these annotations aren't the greatest UX ever, it's better than nothing and
+         pins the exact coordinates. Plus, apple doesn't always show labels.
+         */
+        let annotation = MKPointAnnotation()
+        annotation.title = location.name
+        annotation.coordinate = CLLocationCoordinate2D(
+            latitude: location.coordinates.latitude,
+            longitude: location.coordinates.longitude
+        )
+        mapView.addAnnotation(annotation)
+
         view.addSubview(mapView)
         setupConstraints()
     }

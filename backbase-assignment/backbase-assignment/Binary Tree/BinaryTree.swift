@@ -32,14 +32,14 @@ class SearchTree {
     }
 
     public func search(_ key: String) -> Node {
-        // No searchable string, return an 'empty' node set
-        if key.isEmpty { return Node() }
-
         var node = root
-        let lowercasedKey = key.lowercased().filter { $0.isLetter || $0.isNumber }
+        let normalizedKey = key.normalizeForSearch()
 
-        for i in 0...(lowercasedKey.count - 1) {
-            let char = lowercasedKey[lowercasedKey.index(lowercasedKey.startIndex, offsetBy: i)]
+        // No searchable string, return an 'empty' node set
+        if normalizedKey.isEmpty { return Node() }
+
+        for i in 0...(normalizedKey.count - 1) {
+            let char = normalizedKey[normalizedKey.index(normalizedKey.startIndex, offsetBy: i)]
 
             if node.children[char] == nil {
                 // There's no more searchable nodes in this tree, return empty node set
@@ -61,11 +61,6 @@ class SearchTree {
     }
 
     public func getReachingTerminationNodes(_ node: Node, results: inout [Node]) {
-        if node.isTerminationNode {
-            results.append(node)
-            return
-        }
-
         for child in node.children {
             if child.value.isTerminationNode {
                 results.append(child.value)
@@ -75,7 +70,7 @@ class SearchTree {
         }
     }
 
-    // TODO: remove this, it's for debugging 
+    #if DEBUG
     public func countTree(_ node: Node, result: inout Int) {
         for child in node.children {
             result += 1
@@ -83,4 +78,5 @@ class SearchTree {
             countTree(child.value, result: &result)
         }
     }
+    #endif
 }

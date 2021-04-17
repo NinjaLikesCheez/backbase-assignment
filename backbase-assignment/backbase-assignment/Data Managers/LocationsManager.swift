@@ -71,7 +71,7 @@ struct LocationsManager {
             // Sort the locations, write to cache file to squeek out some fast load time.
             // (basically negligable, but every little helps)
             var locations = try! decodeLocations(atURL: defaultPath)
-            locations.sort { $0.getDisplayName() < $1.getDisplayName() }
+            locations.sort { $0.getKey() < $1.getKey() }
 
             DispatchQueue.main.async {
                 completionHandler(locations)

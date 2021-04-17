@@ -9,7 +9,7 @@ import Foundation
 
 struct Coordinates: Codable {
     let longitude: Double
-    let latitude: Double // TODO: Decode straight to CL Location items?
+    let latitude: Double
 
     enum CodingKeys: String, CodingKey {
         case longitude = "lon"
@@ -38,8 +38,20 @@ struct Location: Codable {
     }
 
     public func getKey() -> String {
-        "\(name)\(country)"
-            .lowercased()
-            .filter { $0.isLetter || $0.isNumber }
+        "\(name)\(country)".normalizeForSearch()
+    }
+}
+
+extension Location: Comparable {
+    static func == (lhs: Location, rhs: Location) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    static func < (lhs: Location, rhs: Location) -> Bool {
+        lhs.getDisplayName() < rhs.getDisplayName()
+    }
+
+    static func > (lhs: Location, rhs: Location) -> Bool {
+        lhs.getDisplayName() > rhs.getDisplayName()
     }
 }

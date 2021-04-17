@@ -13,19 +13,35 @@ class LocationsViewController: UITableViewController {
     private var searchController: UISearchController!
     private let resultsController = LocationsSearchResultsController()
 
+    private var loadingViewController: LoadingViewController? = {
+        let loadingViewController = LoadingViewController()
+        loadingViewController.modalTransitionStyle = .crossDissolve
+        loadingViewController.modalPresentationStyle = .overFullScreen
+        return loadingViewController
+    }()
+
     private var locations: Locations = [] {
         didSet {
-            // TODO: Animate this
-            print("Setting locations")
             tableView.reloadData()
 
+            #if DEBUG
             let start = CFAbsoluteTimeGetCurrent()
+            #endif
+
             tree = SearchTree()
             locations.forEach { tree.insert($0) }
+
+            #if DEBUG
+            let diff = CFAbsoluteTimeGetCurrent() - start
+            print("Generated tree in \(diff) seconds")
             var count = 0
             tree.countTree(tree.root, result: &count)
-            let diff = CFAbsoluteTimeGetCurrent() - start
-            print("Generated tree in: \(diff), count: \(count)")
+            print("\(count) nodes in tree.")
+            #endif
+
+
+            loadingViewController?.dismiss(animated: true)
+            loadingViewController = nil
         }
     }
 
@@ -51,6 +67,10 @@ class LocationsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        if let viewController = loadingViewController {
+            navigationController?.present(viewController, animated: true)
+        }
+
         locationsManager.getLocations {
             self.locations = $0
         }
@@ -71,6 +91,9 @@ class LocationsViewController: UITableViewController {
     private func setupSearchController() {
         searchController = UISearchController(searchResultsController: resultsController)
         searchController.searchBar.sizeToFit()
+        searchController.searchBar.autocapitalizationType = .none
+        searchController.searchBar.autocorrectionType = .no
+        searchController.searchBar.searchTextField.smartQuotesType = .no
         searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
         searchController.hidesNavigationBarDuringPresentation = true
@@ -108,8 +131,7 @@ extension LocationsViewController: UISearchResultsUpdating {
 
         searchWorkItem = DispatchWorkItem {
             let node = self.tree.search(searchText)
-            var results = self.tree.getReachingLocationsFromNode(node)
-            results.sort { $0.getDisplayName() < $1.getDisplayName() }
+            let results = self.tree.getReachingLocationsFromNode(node).sorted()
 
             DispatchQueue.main.async {
                 if let resultsController = self.searchController.searchResultsController as? LocationsSearchResultsController {
