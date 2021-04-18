@@ -24,34 +24,7 @@ class LocationsViewController: UITableViewController {
         return loadingViewController
     }()
 
-    /// The data models for this table view. Rebuilds the search tree when updated.
-    private var locations: Locations = [] {
-        didSet {
-            tableView.reloadData()
-
-            #if DEBUG
-            let start = CFAbsoluteTimeGetCurrent()
-            #endif
-
-            // Clear and repopulate the tree
-            tree = SearchTree()
-            locations.forEach { tree.insert($0) }
-
-            #if DEBUG
-            let diff = CFAbsoluteTimeGetCurrent() - start
-            print("Generated tree in \(diff) seconds")
-            var count = 0
-            tree.countTree(tree.root, result: &count)
-            print("\(count) nodes in tree.")
-            #endif
-
-            loadingViewController?.dismiss(animated: true)
-            loadingViewController = nil
-        }
-    }
-
-    /// A binary search tree to optimize location searches
-    private var tree = SearchTree()
+    private let manager = LocationsManager.instance
 
     /// A queue to run searches on (via the `searchWorkItem`)
     private let searchQueue = DispatchQueue(label: "Search Queue", qos: .userInitiated)
@@ -65,6 +38,7 @@ class LocationsViewController: UITableViewController {
         title = "Backbase"
 
         navigationItem.largeTitleDisplayMode = .always
+        manager.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -76,10 +50,6 @@ class LocationsViewController: UITableViewController {
         // Do any additional setup after loading the view.
         if let viewController = loadingViewController {
             navigationController?.present(viewController, animated: true)
-        }
-
-        LocationsManager().getLocations {
-            self.locations = $0
         }
     }
 
@@ -137,8 +107,7 @@ extension LocationsViewController: UISearchResultsUpdating {
         else { return }
 
         searchWorkItem = DispatchWorkItem {
-            let node = self.tree.search(searchText)
-            let results = self.tree.getReachingLocationsFromNode(node).sorted()
+            let results = self.manager.search(searchText)
 
             DispatchQueue.main.async {
                 if let resultsController = self.searchController.searchResultsController as? LocationsSearchResultsController {
@@ -156,7 +125,7 @@ extension LocationsViewController: UISearchResultsUpdating {
 extension LocationsViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         deselectSelectedRow()
-        let location = locations[indexPath.row]
+        let location = manager.locations[indexPath.row]
 
         let viewController = MapViewController(location)
         navigationController?.pushViewController(viewController, animated: true)
@@ -166,7 +135,7 @@ extension LocationsViewController {
 // MARK: - Table View DataSource Conformance
 extension LocationsViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        locations.count
+        manager.locations.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -175,9 +144,18 @@ extension LocationsViewController {
             for: indexPath
         )
         
-        let location = locations[indexPath.row]
+        let location = manager.locations[indexPath.row]
         cell.configureLocationCell(location)
 
         return cell
+    }
+}
+
+extension LocationsViewController: LocationsManagerDelegate {
+    func locationsDidUpdate(_ locations: Locations) {
+        tableView.reloadData()
+
+        loadingViewController?.dismiss(animated: true)
+        loadingViewController = nil
     }
 }

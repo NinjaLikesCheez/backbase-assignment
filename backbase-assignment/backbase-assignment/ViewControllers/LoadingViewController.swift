@@ -24,7 +24,8 @@ class LoadingViewController: UIViewController {
 
     private let activityLabel: UILabel = {
         let label = UILabel()
-        label.text = "'Initial loading time of the app does not matter.'\n🎉"
+        label.text = "'Initial loading time of the app does not matter.' 🎉"
+        label.sizeToFit()
         label.numberOfLines = 2
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

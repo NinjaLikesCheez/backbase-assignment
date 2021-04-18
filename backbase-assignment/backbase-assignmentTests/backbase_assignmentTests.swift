@@ -10,16 +10,21 @@ import XCTest
 
 
 class backbase_assignmentTests: XCTestCase {
+    let manager = LocationsManager.instance
     var locations: Locations!
-    var tree: SearchTree!
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         try super.setUpWithError()
 
-        locations = LocationsManager().fetchLocations()
-        tree = SearchTree()
-        locations.forEach { tree.insert($0) }
+        let locationExpectation = expectation(description: "\(#function)\(#line)")
+
+        manager.getLocations {
+            self.locations = $0
+            locationExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDownWithError() throws {
@@ -41,8 +46,7 @@ class backbase_assignmentTests: XCTestCase {
         ]
 
         for (searchText, count) in searchTerms {
-            let node = self.tree.search(searchText)
-            let results = self.tree.getReachingLocationsFromNode(node).sorted()
+            let results = manager.search(searchText)
 
             // Expected search counts align
             XCTAssert(results.count == count)
@@ -53,7 +57,7 @@ class backbase_assignmentTests: XCTestCase {
             }
 
             // Test against a known filtering method
-            let filteredResults = self.locations.filter { $0.getKey().normalizeForSearch().hasPrefix(searchText.normalizeForSearch())
+            let filteredResults = manager.locations.filter { $0.getKey().normalizeForSearch().hasPrefix(searchText.normalizeForSearch())
             }.sorted()
 
             XCTAssert(results == filteredResults)
@@ -73,13 +77,12 @@ class backbase_assignmentTests: XCTestCase {
         ]
 
         for searchText in searchTerms {
-            let node = self.tree.search(searchText)
-            let results = self.tree.getReachingLocationsFromNode(node).sorted()
+            let results = manager.search(searchText)
 
             XCTAssert(results.isEmpty)
 
             // Test against known filtering method - we don't normalize the search text in this case
-            let filteredResults = self.locations.filter {
+            let filteredResults = manager.locations.filter {
                 $0.getKey().normalizeForSearch().hasPrefix(searchText)
             }.sorted()
 
@@ -91,14 +94,14 @@ class backbase_assignmentTests: XCTestCase {
         // This is an example of a performance test case.
         self.measure {
             // Put the code you want to measure the time of here.
-            let node = self.tree.search("Amsterdam")
-            let _ = self.tree.getReachingLocationsFromNode(node).sorted()
+            let _ = manager.search("Amsterdam")
+
         }
     }
 
     func testFilterPerformance() throws {
         self.measure {
-            let _ = self.locations.filter { $0.getKey().normalizeForSearch().hasPrefix("Amsterdam".normalizeForSearch())
+            let _ = manager.locations.filter { $0.getKey().normalizeForSearch().hasPrefix("Amsterdam".normalizeForSearch())
             }.sorted()
         }
     }

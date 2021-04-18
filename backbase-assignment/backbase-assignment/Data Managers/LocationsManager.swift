@@ -9,7 +9,12 @@ import Foundation
 
 typealias Locations = [Location]
 
-struct LocationsManager {
+protocol LocationsManagerDelegate: AnyObject {
+    func locationsDidUpdate(_ locations: Locations)
+}
+
+class LocationsManager {
+    static let instance = LocationsManager()
     static private let fileName = "cities"
     static private let sortedFileName = "\(LocationsManager.fileName)-sorted"
     static private let fileExtension = "json"
@@ -22,7 +27,32 @@ struct LocationsManager {
     /// Path on disk to the cached data source
     var cachedPath: URL
 
-    init() {
+    /// A binary search tree to optimize location searches
+    private var tree = SearchTree()
+
+    
+    var locations: Locations = [] {
+        didSet {
+            #if DEBUG
+            let start = CFAbsoluteTimeGetCurrent()
+            #endif
+
+            // Clear and repopulate the tree
+            tree = SearchTree()
+            locations.forEach { tree.insert($0) }
+
+            #if DEBUG
+            let diff = CFAbsoluteTimeGetCurrent() - start
+            print("Generated tree of \(tree.count) nodes in \(diff) seconds")
+            #endif
+
+            delegate?.locationsDidUpdate(locations)
+        }
+    }
+
+    weak var delegate: LocationsManagerDelegate?
+
+    private init() {
         guard
             let path = Bundle.main.url(
                 forResource: LocationsManager.fileName,
@@ -43,6 +73,10 @@ struct LocationsManager {
         cachedPath = cachePath.appendingPathComponent(
             "\(LocationsManager.sortedFileName).\(LocationsManager.fileExtension)"
         )
+
+        getLocations {
+            self.locations = $0
+        }
     }
 
     private func decodeLocations(atURL url: URL) throws -> Locations {
@@ -55,19 +89,25 @@ struct LocationsManager {
         try data.write(to: url)
     }
 
+    // MARK: - Public Functions
+    public func search(_ key: String) -> Locations {
+        let node = tree.search(key)
+        return tree.getReachingLocationsFromNode(node).sorted()
+    }
+
     /// Parses `Locations` from the data source. On first run, this function will sort the keys and write a cache file
     /// - Parameter completionHandler: handler run after locations have been decoded
     public func getLocations(completionHandler: @escaping (Locations) -> Void) {
         DispatchQueue.global(qos: .utility).async {
-            if fileManager.fileExists(atPath: cachedPath.path) {
+            if self.fileManager.fileExists(atPath: self.cachedPath.path) {
                 do {
-                    let locations = try decodeLocations(atURL: cachedPath)
+                    let locations = try self.decodeLocations(atURL: self.cachedPath)
 
                     DispatchQueue.main.async {
                         completionHandler(locations)
                     }
                 } catch {
-                    fatalError("Failed to decode cached locations at path: \(cachedPath) with error: \(error)")
+                    fatalError("Failed to decode cached locations at path: \(self.cachedPath) with error: \(error)")
                 }
 
                 return
@@ -76,7 +116,7 @@ struct LocationsManager {
             // Sort the locations, write to cache file to squeek out some fast load time.
             // (basically negligable, but every little helps)
             do {
-                var locations = try decodeLocations(atURL: defaultPath)
+                var locations = try self.decodeLocations(atURL: self.defaultPath)
                 locations.sort { $0.getKey() < $1.getKey() }
 
                 DispatchQueue.main.async {
@@ -84,43 +124,13 @@ struct LocationsManager {
                 }
 
                 do {
-                    try encode(locations, toURL: cachedPath)
+                    try self.encode(locations, toURL: self.cachedPath)
                 } catch {
-                    fatalError("Failed to encode locations to path: \(cachedPath.path) with error: \(error)")
+                    fatalError("Failed to encode locations to path: \(self.cachedPath.path) with error: \(error)")
                 }
             } catch {
-                fatalError("Failed to decode locations at path: \(defaultPath) with error: \(error)")
+                fatalError("Failed to decode locations at path: \(self.defaultPath) with error: \(error)")
             }
-        }
-    }
-}
-
-extension LocationsManager {
-    /// This function is the same as the the regular locations one, but doesn't rely on closures to make testing setup easier
-    public func fetchLocations() -> Locations {
-        if fileManager.fileExists(atPath: cachedPath.path) {
-            do {
-                return try decodeLocations(atURL: cachedPath)
-            } catch {
-                fatalError("Failed to decode cached locations at path: \(cachedPath) with error: \(error)")
-            }
-        }
-
-        // Sort the locations, write to cache file to squeek out some fast load time.
-        // (basically negligable, but every little helps)
-        do {
-            var locations = try decodeLocations(atURL: defaultPath)
-            locations.sort { $0.getKey() < $1.getKey() }
-
-            do {
-                try encode(locations, toURL: cachedPath)
-            } catch {
-                fatalError("Failed to encode locations to path: \(cachedPath.path) with error: \(error)")
-            }
-
-            return locations
-        } catch {
-            fatalError("Failed to decode locations at path: \(defaultPath) with error: \(error)")
         }
     }
 }

@@ -14,6 +14,11 @@ class SearchTree {
     /// The top-level node that contains all other nodes
     var root = Node()
 
+    #if DEBUG
+    /// The number of nodes in the tree
+    var count = 1
+    #endif
+
     /// Inserts a location into the tree
     ///
     /// This will create (if the node doesn't already exist) a node for every character in the location's key until it reaches the end of the key.
@@ -29,6 +34,9 @@ class SearchTree {
             if let child = node.children[char] {
                 node = child
             } else {
+                #if DEBUG
+                count += 1
+                #endif
                 node.insert(character: char)
                 node = node.children[char]!
             }
@@ -97,18 +105,4 @@ class SearchTree {
             getReachingTerminationNodes(child.value, results: &results)
         }
     }
-
-    #if DEBUG
-    /// Counts the contained nodes for a given nodes.
-    /// - Parameters:
-    ///   - node: the node to search through
-    ///   - result: the number of nodes found
-    public func countTree(_ node: Node, result: inout Int) {
-        for child in node.children {
-            result += 1
-
-            countTree(child.value, result: &result)
-        }
-    }
-    #endif
 }
