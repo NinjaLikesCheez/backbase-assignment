@@ -11,7 +11,7 @@ class LocationsViewController: UITableViewController {
     static private let reuseIdentifier = "\(String(describing: self))CellReuseIdentifier"
 
     /// Responsible for controlling the search bar and dispatching requests to update the results
-    private var searchController: UISearchController!
+    private var searchController: UISearchController
 
     /// Shows the search results
     private let resultsController = LocationsSearchResultsController()
@@ -26,6 +26,15 @@ class LocationsViewController: UITableViewController {
 
     private let manager = LocationsManager.instance
 
+    private var locations: Locations = [] {
+        didSet {
+            tableView.reloadData()
+
+            loadingViewController?.dismiss(animated: true)
+            loadingViewController = nil
+        }
+    }
+
     /// A queue to run searches on (via the `searchWorkItem`)
     private let searchQueue = DispatchQueue(label: "Search Queue", qos: .userInitiated)
 
@@ -33,6 +42,8 @@ class LocationsViewController: UITableViewController {
     private var searchWorkItem: DispatchWorkItem?
 
     init() {
+        searchController = UISearchController(searchResultsController: resultsController)
+
         super.init(nibName: nil, bundle: nil)
 
         title = "Backbase"
@@ -51,6 +62,9 @@ class LocationsViewController: UITableViewController {
         if let viewController = loadingViewController {
             navigationController?.present(viewController, animated: true)
         }
+
+        // TODO: try adjusting the inset on search bar delegate methods
+        tableView.contentInsetAdjustmentBehavior = .scrollableAxes
     }
 
     override func loadView() {
@@ -60,13 +74,18 @@ class LocationsViewController: UITableViewController {
     }
 
     // MARK: - Setup Functions
+//    private func layoutConstraints() {
+//        NSLayoutConstraint.activate([
+//            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+//        ])
+//    }
+
     private func setup() {
         setupSearchController()
         setupTableView()
     }
 
     private func setupSearchController() {
-        searchController = UISearchController(searchResultsController: resultsController)
         searchController.searchBar.sizeToFit()
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.autocorrectionType = .no
@@ -92,7 +111,16 @@ class LocationsViewController: UITableViewController {
 }
 
 // MARK: - Searching Conformance
-extension LocationsViewController: UISearchBarDelegate { }
+extension LocationsViewController: UISearchBarDelegate {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        return true
+    }
+
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+
+    }
+}
 
 extension LocationsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
@@ -102,12 +130,16 @@ extension LocationsViewController: UISearchResultsUpdating {
         }
 
         guard
-            let searchText = searchController.searchBar.text,
-            !searchText.isEmpty
+            let searchText = searchController.searchBar.text
         else { return }
 
         searchWorkItem = DispatchWorkItem {
-            let results = self.manager.search(searchText)
+            // We want to clear the selection in the results controller for 'empty' searches
+            // else the UI will flash the cached results from the previous search.
+            var results: Locations = []
+            if !searchText.isEmpty {
+                results = self.manager.search(searchText)
+            }
 
             DispatchQueue.main.async {
                 if let resultsController = self.searchController.searchResultsController as? LocationsSearchResultsController {
@@ -125,7 +157,7 @@ extension LocationsViewController: UISearchResultsUpdating {
 extension LocationsViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         deselectSelectedRow()
-        let location = manager.locations[indexPath.row]
+        let location = locations[indexPath.row]
 
         let viewController = MapViewController(location)
         navigationController?.pushViewController(viewController, animated: true)
@@ -135,7 +167,7 @@ extension LocationsViewController {
 // MARK: - Table View DataSource Conformance
 extension LocationsViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        manager.locations.count
+        locations.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -144,7 +176,7 @@ extension LocationsViewController {
             for: indexPath
         )
         
-        let location = manager.locations[indexPath.row]
+        let location = locations[indexPath.row]
         cell.configureLocationCell(location)
 
         return cell
@@ -153,9 +185,6 @@ extension LocationsViewController {
 
 extension LocationsViewController: LocationsManagerDelegate {
     func locationsDidUpdate(_ locations: Locations) {
-        tableView.reloadData()
-
-        loadingViewController?.dismiss(animated: true)
-        loadingViewController = nil
+        self.locations = locations
     }
 }

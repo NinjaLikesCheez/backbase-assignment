@@ -85,18 +85,24 @@ class SearchTree {
     /// - Parameter node: the node to search
     /// - Returns: all locations in the subtree
     public func getReachingLocationsFromNode(_ node: Node) -> Locations {
-        var results: [Node] = []
-        getReachingTerminationNodes(node, results: &results)
+        var results: Locations
 
-        let locations = results.compactMap { $0.locations }.flatMap { $0 }
-        return locations
+        if node.isTerminationNode, let locations = node.locations {
+            results = locations
+        } else {
+            var nodes: [Node] = []
+            getReachingTerminationNodes(node, results: &nodes)
+            results = nodes.compactMap { $0.locations }.flatMap { $0 }
+        }
+
+        return results
     }
 
     /// Gets all 'terminating' nodes (i.e. the end-of-the-chain nodes)
     /// - Parameters:
     ///   - node: the node to search through
     ///   - results: a list of the terminating nodes
-    public func getReachingTerminationNodes(_ node: Node, results: inout [Node]) {
+    private func getReachingTerminationNodes(_ node: Node, results: inout [Node]) {
         for child in node.children {
             if child.value.isTerminationNode {
                 results.append(child.value)

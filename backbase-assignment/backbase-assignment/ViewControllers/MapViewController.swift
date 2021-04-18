@@ -28,8 +28,9 @@ class MapViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
+
         title = location.getDisplayName()
         navigationItem.largeTitleDisplayMode = .never
 

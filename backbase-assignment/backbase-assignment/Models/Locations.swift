@@ -7,21 +7,22 @@
 
 import Foundation
 
-struct Coordinates: Codable {
-    let longitude: Double
-    let latitude: Double
-
-    enum CodingKeys: String, CodingKey {
-        case longitude = "lon"
-        case latitude = "lat"
-    }
-}
-
 struct Location: Codable {
     let country: String
     let name: String
     let id: Int
     let coordinates: Coordinates
+
+    struct Coordinates: Codable {
+        let longitude: Double
+        let latitude: Double
+
+        enum CodingKeys: String, CodingKey {
+            case longitude = "lon"
+            case latitude = "lat"
+        }
+    }
+
 
     enum CodingKeys: String, CodingKey {
         case country, name
@@ -41,7 +42,7 @@ struct Location: Codable {
 
     /// A normalized key to use for searching, this is not guaranteed to be unique
     public func getKey() -> String {
-        "\(name)\(country)".normalizeForSearch()
+        "\(name),\(country)".normalizeForSearch()
     }
 }
 

@@ -42,7 +42,8 @@ class backbase_assignmentTests: XCTestCase {
             "'": 2,
             "Rotterdam": 2,
             "Auckland": 4, // there certainly isn't really 3 Aucklands in NZ but sure
-            "Cape Town": 1
+            "Cape Town": 1,
+            "Amsterdam, NL": 1 // Test a previous issue where termination nodes weren't added when the key matched exactly
         ]
 
         for (searchText, count) in searchTerms {
