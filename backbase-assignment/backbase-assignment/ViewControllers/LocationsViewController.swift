@@ -62,9 +62,6 @@ class LocationsViewController: UITableViewController {
         if let viewController = loadingViewController {
             navigationController?.present(viewController, animated: true)
         }
-
-        // TODO: try adjusting the inset on search bar delegate methods
-        tableView.contentInsetAdjustmentBehavior = .scrollableAxes
     }
 
     override func loadView() {
@@ -74,12 +71,6 @@ class LocationsViewController: UITableViewController {
     }
 
     // MARK: - Setup Functions
-//    private func layoutConstraints() {
-//        NSLayoutConstraint.activate([
-//            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-//        ])
-//    }
-
     private func setup() {
         setupSearchController()
         setupTableView()
@@ -90,9 +81,13 @@ class LocationsViewController: UITableViewController {
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.autocorrectionType = .no
         searchController.searchBar.searchTextField.smartQuotesType = .no
-        searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
+        // BUG: There's a apple bug I can't quite figure out how to get around where the
+        // table view is 'inset' when you scroll the table view down, tap the status bar, then search
+        // the content offsets don't change at any point, constraints don't help.
+        // This happens in Apple Mail, Settings, Messages... basically anywhere with a search controller
         searchController.hidesNavigationBarDuringPresentation = true
+        searchController.obscuresBackgroundDuringPresentation = false
 
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = true
@@ -110,21 +105,12 @@ class LocationsViewController: UITableViewController {
     }
 }
 
-// MARK: - Searching Conformance
-extension LocationsViewController: UISearchBarDelegate {
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        return true
-    }
-
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-
-    }
-}
-
 extension LocationsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if searchWorkItem != nil {
+            // This won't actually cancel the work item as it'll be executing by this point.
+            // We could add a slight delay to the execution (which I would normally do) but the brief
+            // says to search on every key press. Luckily searching is quick enough to execute in time.
             searchWorkItem?.cancel()
             searchWorkItem = nil
         }

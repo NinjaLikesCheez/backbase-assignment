@@ -98,7 +98,7 @@ class LocationsManager {
     /// Parses `Locations` from the data source. On first run, this function will sort the keys and write a cache file
     /// - Parameter completionHandler: handler run after locations have been decoded
     public func getLocations(completionHandler: @escaping (Locations) -> Void) {
-        DispatchQueue.global(qos: .utility).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             if self.fileManager.fileExists(atPath: self.cachedPath.path) {
                 do {
                     let locations = try self.decodeLocations(atURL: self.cachedPath)

@@ -28,8 +28,6 @@ class LocationsSearchResultsController: UITableViewController {
         tableView.delegate = self
     }
 
-    override func loadView() { super.loadView() }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
