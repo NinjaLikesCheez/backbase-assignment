@@ -33,6 +33,7 @@ class LocationsViewController: UITableViewController {
             let start = CFAbsoluteTimeGetCurrent()
             #endif
 
+            // Clear and repopulate the tree
             tree = SearchTree()
             locations.forEach { tree.insert($0) }
 
@@ -43,7 +44,6 @@ class LocationsViewController: UITableViewController {
             tree.countTree(tree.root, result: &count)
             print("\(count) nodes in tree.")
             #endif
-
 
             loadingViewController?.dismiss(animated: true)
             loadingViewController = nil

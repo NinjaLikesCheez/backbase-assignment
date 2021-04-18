@@ -8,6 +8,7 @@
 import UIKit
 
 class LocationsSearchResultsController: UITableViewController {
+    /// The data models for this table view
     var results: Locations = [] {
         didSet {
             tableView.reloadData()

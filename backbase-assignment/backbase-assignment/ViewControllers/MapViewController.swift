@@ -15,6 +15,7 @@ class MapViewController: UIViewController {
         return mapView
     }()
 
+    /// The location to pin and show on the map
     private let location: Location
 
     init(_ location: Location) {

@@ -7,7 +7,9 @@
 
 import Foundation
 
-/// A light-weight Prefix Binary Search Tree (Trie). While this could be made generic, the scope of this application is pretty small.
+/// A light-weight Prefix Binary Search Tree (Trie).
+///
+/// - Note: While this could be made generic, the scope of this application is pretty small.
 class SearchTree {
     /// The top-level node that contains all other nodes
     var root = Node()
@@ -20,7 +22,7 @@ class SearchTree {
     public func insert(_ location: Location) {
         var node = root
 
-        let key = location.getKey()
+        let key = location.getKey().normalizeForSearch()
         for i in 0...(key.count - 1) {
             let char = key[key.index(key.startIndex, offsetBy: i)]
 

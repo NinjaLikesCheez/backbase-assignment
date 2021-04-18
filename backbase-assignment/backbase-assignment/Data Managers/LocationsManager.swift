@@ -16,8 +16,11 @@ struct LocationsManager {
 
     let fileManager = FileManager.default
 
+    /// Path on disk to the original data source
     var defaultPath: URL
-    var sortedPath: URL
+
+    /// Path on disk to the cached data source
+    var cachedPath: URL
 
     init() {
         guard
@@ -37,7 +40,7 @@ struct LocationsManager {
             fatalError("Failed to find the caches directory in the user domain.")
         }
 
-        sortedPath = cachePath.appendingPathComponent(
+        cachedPath = cachePath.appendingPathComponent(
             "\(LocationsManager.sortedFileName).\(LocationsManager.fileExtension)"
         )
     }
@@ -52,17 +55,19 @@ struct LocationsManager {
         try data.write(to: url)
     }
 
+    /// Parses `Locations` from the data source. On first run, this function will sort the keys and write a cache file
+    /// - Parameter completionHandler: handler run after locations have been decoded
     public func getLocations(completionHandler: @escaping (Locations) -> Void) {
         DispatchQueue.global(qos: .utility).async {
-            if fileManager.fileExists(atPath: sortedPath.path) {
+            if fileManager.fileExists(atPath: cachedPath.path) {
                 do {
-                    let locations = try decodeLocations(atURL: sortedPath)
+                    let locations = try decodeLocations(atURL: cachedPath)
 
                     DispatchQueue.main.async {
                         completionHandler(locations)
                     }
                 } catch {
-                    fatalError("Failed to decode cached locations at path: \(sortedPath) with error: \(error)")
+                    fatalError("Failed to decode cached locations at path: \(cachedPath) with error: \(error)")
                 }
 
                 return
@@ -78,9 +83,9 @@ struct LocationsManager {
             }
 
             do {
-                try encode(locations, toURL: sortedPath)
+                try encode(locations, toURL: cachedPath)
             } catch {
-                fatalError("Failed to encode locations to path: \(sortedPath.path) with error: \(error)")
+                fatalError("Failed to encode locations to path: \(cachedPath.path) with error: \(error)")
             }
         }
     }

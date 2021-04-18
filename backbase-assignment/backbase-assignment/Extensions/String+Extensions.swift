@@ -8,7 +8,6 @@
 import Foundation
 
 extension String {
-    // TODO: research unicode normalization
     /// Creates a normalized string optimized for inserting & searching a binary tree
     func normalizeForSearch() -> String {
         self.lowercased()

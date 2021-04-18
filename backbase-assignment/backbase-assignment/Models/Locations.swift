@@ -29,14 +29,17 @@ struct Location: Codable {
         case coordinates = "coord"
     }
 
+    /// A 'name' string to display to humans (helper for table cells, titles, etc)
     public func getDisplayName() -> String {
         "\(name), \(country)"
     }
 
+    /// A 'coordinated' string to display to humans (helper for table cells etc)
     public func getCoordinatesString() -> String {
         "(\(coordinates.latitude), \(coordinates.longitude))"
     }
 
+    /// A normalized key to use for searching, this is not guaranteed to be unique
     public func getKey() -> String {
         "\(name)\(country)".normalizeForSearch()
     }
