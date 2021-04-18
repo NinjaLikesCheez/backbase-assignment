@@ -126,8 +126,6 @@ extension LocationsViewController: UISearchBarDelegate { }
 
 extension LocationsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO: Ensure this does what I think it does - I can almost bet that cancel() doesn't _actually_ cancel
-        // Maybe NSOperationQueue is a better fit
         if searchWorkItem != nil {
             searchWorkItem?.cancel()
             searchWorkItem = nil
@@ -149,9 +147,7 @@ extension LocationsViewController: UISearchResultsUpdating {
             }
         }
 
-        // Offload searching to a background thread so we don't:
-        // * lock up the UI and,
-        // * we can cancel potentially expensive operations when they're no longer needed
+        // Offload searching to a background thread so we don't lock up the UI
         searchQueue.async(execute: searchWorkItem!)
     }
 }
@@ -174,32 +170,13 @@ extension LocationsViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: Extract to custom cell?
         let cell = tableView.dequeueReusableCell(
             withIdentifier: LocationsViewController.reuseIdentifier,
             for: indexPath
         )
-
+        
         let location = locations[indexPath.row]
-
-        let text = location.getDisplayName()
-        let secondaryText = location.getCoordinatesString()
-        let secondaryTextColor = UIColor.secondaryLabel
-
-        if #available(iOS 14.0, *) {
-            var configuration = cell.defaultContentConfiguration()
-            configuration.text = text
-            configuration.secondaryText = secondaryText
-            configuration.secondaryTextProperties.color = secondaryTextColor
-
-            cell.contentConfiguration = configuration
-        } else {
-            cell.textLabel?.text = text
-            cell.detailTextLabel?.text = secondaryText
-            cell.detailTextLabel?.textColor = secondaryTextColor
-        }
-
-        cell.accessoryType = .disclosureIndicator
+        cell.configureLocationCell(location)
 
         return cell
     }

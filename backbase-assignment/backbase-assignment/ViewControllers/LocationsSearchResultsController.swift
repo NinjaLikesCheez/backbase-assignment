@@ -45,32 +45,13 @@ extension LocationsSearchResultsController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: Extract to custom cell!!!
         let cell = tableView.dequeueReusableCell(
             withIdentifier: LocationsSearchResultsController.reuseIdentifier,
             for: indexPath
         )
 
         let location = results[indexPath.row]
-
-        let text = location.getDisplayName()
-        let secondaryText = location.getCoordinatesString()
-        let secondaryTextColor = UIColor.secondaryLabel
-
-        if #available(iOS 14.0, *) {
-            var configuration = cell.defaultContentConfiguration()
-            configuration.text = text
-            configuration.secondaryText = secondaryText
-            configuration.secondaryTextProperties.color = secondaryTextColor
-
-            cell.contentConfiguration = configuration
-        } else {
-            cell.textLabel?.text = text
-            cell.detailTextLabel?.text = secondaryText
-            cell.detailTextLabel?.textColor = secondaryTextColor
-        }
-
-        cell.accessoryType = .disclosureIndicator
+        cell.configureLocationCell(location)
 
         return cell
     }

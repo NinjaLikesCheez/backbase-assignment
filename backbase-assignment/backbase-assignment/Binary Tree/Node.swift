@@ -19,7 +19,6 @@ class Node {
     /// The value of this node
     var value: Character?
 
-    // TODO: this doesn't need to be an empty array unless we're storing stuff here.
     /// A list of locations this node can represent
     var locations: Locations?
 
