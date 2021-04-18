@@ -75,18 +75,52 @@ struct LocationsManager {
 
             // Sort the locations, write to cache file to squeek out some fast load time.
             // (basically negligable, but every little helps)
-            var locations = try! decodeLocations(atURL: defaultPath)
-            locations.sort { $0.getKey() < $1.getKey() }
+            do {
+                var locations = try decodeLocations(atURL: defaultPath)
+                locations.sort { $0.getKey() < $1.getKey() }
 
-            DispatchQueue.main.async {
-                completionHandler(locations)
+                DispatchQueue.main.async {
+                    completionHandler(locations)
+                }
+
+                do {
+                    try encode(locations, toURL: cachedPath)
+                } catch {
+                    fatalError("Failed to encode locations to path: \(cachedPath.path) with error: \(error)")
+                }
+            } catch {
+                fatalError("Failed to decode locations at path: \(defaultPath) with error: \(error)")
             }
+        }
+    }
+}
+
+extension LocationsManager {
+    /// This function is the same as the the regular locations one, but doesn't rely on closures to make testing setup easier
+    public func fetchLocations() -> Locations {
+        if fileManager.fileExists(atPath: cachedPath.path) {
+            do {
+                return try decodeLocations(atURL: cachedPath)
+            } catch {
+                fatalError("Failed to decode cached locations at path: \(cachedPath) with error: \(error)")
+            }
+        }
+
+        // Sort the locations, write to cache file to squeek out some fast load time.
+        // (basically negligable, but every little helps)
+        do {
+            var locations = try decodeLocations(atURL: defaultPath)
+            locations.sort { $0.getKey() < $1.getKey() }
 
             do {
                 try encode(locations, toURL: cachedPath)
             } catch {
                 fatalError("Failed to encode locations to path: \(cachedPath.path) with error: \(error)")
             }
+
+            return locations
+        } catch {
+            fatalError("Failed to decode locations at path: \(defaultPath) with error: \(error)")
         }
     }
 }
