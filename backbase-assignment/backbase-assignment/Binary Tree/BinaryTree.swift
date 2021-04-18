@@ -27,7 +27,7 @@ class SearchTree {
     public func insert(_ location: Location) {
         var node = root
 
-        let key = location.getKey().normalizeForSearch()
+        let key = location.key
         for i in 0...(key.count - 1) {
             let char = key[key.index(key.startIndex, offsetBy: i)]
 

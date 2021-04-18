@@ -54,11 +54,11 @@ class backbase_assignmentTests: XCTestCase {
 
             for location in results {
                 // Locations start with the prefix expected
-                XCTAssert(location.getKey().normalizeForSearch().hasPrefix(searchText.normalizeForSearch()))
+                XCTAssert(location.key.hasPrefix(searchText.normalizeForSearch()))
             }
 
             // Test against a known filtering method
-            let filteredResults = manager.locations.filter { $0.getKey().normalizeForSearch().hasPrefix(searchText.normalizeForSearch())
+            let filteredResults = manager.locations.filter { $0.key.hasPrefix(searchText.normalizeForSearch())
             }.sorted()
 
             XCTAssert(results == filteredResults)
@@ -84,7 +84,7 @@ class backbase_assignmentTests: XCTestCase {
 
             // Test against known filtering method - we don't normalize the search text in this case
             let filteredResults = manager.locations.filter {
-                $0.getKey().normalizeForSearch().hasPrefix(searchText)
+                $0.key.hasPrefix(searchText)
             }.sorted()
 
             XCTAssert(filteredResults.isEmpty)
@@ -102,7 +102,7 @@ class backbase_assignmentTests: XCTestCase {
 
     func testFilterPerformance() throws {
         self.measure {
-            let _ = manager.locations.filter { $0.getKey().normalizeForSearch().hasPrefix("Amsterdam".normalizeForSearch())
+            let _ = manager.locations.filter { $0.key.hasPrefix("Amsterdam".normalizeForSearch())
             }.sorted()
         }
     }

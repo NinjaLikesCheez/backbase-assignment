@@ -31,7 +31,7 @@ class MapViewController: UIViewController {
     override func loadView() {
         super.loadView()
 
-        title = location.getDisplayName()
+        title = location.displayName
         navigationItem.largeTitleDisplayMode = .never
 
         let mapLocation = CLLocation(

@@ -117,7 +117,7 @@ class LocationsManager {
             // (basically negligable, but every little helps)
             do {
                 var locations = try self.decodeLocations(atURL: self.defaultPath)
-                locations.sort { $0.getKey() < $1.getKey() }
+                locations.sort { $0.key < $1.key }
 
                 DispatchQueue.main.async {
                     completionHandler(locations)

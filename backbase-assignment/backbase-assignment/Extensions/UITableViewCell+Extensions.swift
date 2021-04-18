@@ -12,8 +12,8 @@ extension UITableViewCell {
     ///
     /// - Note: Normally I'd _never_ do this in a code base and would instead create a cell. However, this project only relies on one cell and has a tight scope
     func configureLocationCell(_ location: Location) {
-        let text = location.getDisplayName()
-        let secondaryText = location.getCoordinatesString()
+        let text = location.displayName
+        let secondaryText = location.coordinates.displayName
         let secondaryTextColor = UIColor.secondaryLabel
 
         if #available(iOS 14.0, *) {
