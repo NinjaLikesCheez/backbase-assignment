@@ -24,7 +24,7 @@ class backbase_assignmentTests: XCTestCase {
             locationExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 15)
+        waitForExpectations(timeout: 25)
     }
 
     override func tearDownWithError() throws {
@@ -47,18 +47,18 @@ class backbase_assignmentTests: XCTestCase {
         ]
 
         for (searchText, count) in searchTerms {
-            let results = manager.search(searchText)
+            let results = manager.search(searchText).sorted()
 
             // Expected search counts align
             XCTAssert(results.count == count)
 
             for location in results {
                 // Locations start with the prefix expected
-                XCTAssert(location.key.hasPrefix(searchText.normalizeForSearch()))
+                XCTAssert(location.displayName.lowercased().hasPrefix(searchText.lowercased()))
             }
 
             // Test against a known filtering method
-            let filteredResults = manager.locations.filter { $0.key.hasPrefix(searchText.normalizeForSearch())
+            let filteredResults = manager.locations.filter { $0.displayName.hasPrefix(searchText)
             }.sorted()
 
             XCTAssert(results == filteredResults)

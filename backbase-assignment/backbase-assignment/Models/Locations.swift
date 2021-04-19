@@ -13,6 +13,7 @@ struct Location: Codable {
     let id: Int
     let coordinates: Coordinates
 
+    /// TODO: remove this variable and refactor out of the codebase -  we now use DisplayName and there's no need for this
     /// A normalized key to use for searching, this is not guaranteed to be unique
     let key: String
 

@@ -42,8 +42,6 @@ class LocationsManager {
             // Clear and repopulate the tree
             radixTree = RadixTree()
             locations.forEach { radixTree.insert($0) }
-//            tree = SearchTree()
-//            locations.forEach { tree.insert($0) }
 
             #if DEBUG
             let diff = CFAbsoluteTimeGetCurrent() - start
@@ -95,8 +93,19 @@ class LocationsManager {
 
     // MARK: - Public Functions
     public func search(_ key: String) -> Locations {
-        let node = tree.search(key)
-        return tree.getReachingLocationsFromNode(node).sorted()
+        #if DEBUG
+        let start = CFAbsoluteTimeGetCurrent()
+        #endif
+
+        let node = radixTree.search(key)
+
+        #if DEBUG
+        let diff = CFAbsoluteTimeGetCurrent() - start
+        print("search took \(diff) seconds")
+        #endif
+
+        let locations = self.radixTree.getReachingLocationsFromNode(node).sorted()
+        return locations
     }
 
     /// Parses `Locations` from the data source. On first run, this function will sort the keys and write a cache file
