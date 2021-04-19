@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BC8DD1DC262C1A57001D2579 /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8DD1DB262C1A57001D2579 /* UITableViewCell+Extensions.swift */; };
 		BC8DD204262CE301001D2579 /* RadixTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8DD203262CE301001D2579 /* RadixTree.swift */; };
+		BC8DD234262DF4EA001D2579 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8DD233262DF4EA001D2579 /* Array+Extensions.swift */; };
 		BCD1625E262ACE1B002D0B02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1625D262ACE1B002D0B02 /* AppDelegate.swift */; };
 		BCD16260262ACE1B002D0B02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1625F262ACE1B002D0B02 /* SceneDelegate.swift */; };
 		BCD16262262ACE1B002D0B02 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD16261262ACE1B002D0B02 /* LocationsViewController.swift */; };
@@ -21,10 +22,8 @@
 		BCD162AA262AD985002D0B02 /* LocationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162A9262AD985002D0B02 /* LocationsManager.swift */; };
 		BCD162B6262ADD35002D0B02 /* cities.json in Resources */ = {isa = PBXBuildFile; fileRef = BCD162B5262ADD35002D0B02 /* cities.json */; };
 		BCD162BB262ADFBF002D0B02 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162BA262ADFBF002D0B02 /* MapViewController.swift */; };
-		BCD162C1262AE605002D0B02 /* BinaryTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162C0262AE605002D0B02 /* BinaryTree.swift */; };
-		BCD162C9262AE613002D0B02 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162C8262AE613002D0B02 /* Node.swift */; };
+		BCD162C9262AE613002D0B02 /* RadixNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD162C8262AE613002D0B02 /* RadixNode.swift */; };
 		BCE2074C262B03CA00ECB973 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE2074B262B03CA00ECB973 /* LoadingViewController.swift */; };
-		BCE20755262B16A500ECB973 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE20754262B16A500ECB973 /* String+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +46,7 @@
 /* Begin PBXFileReference section */
 		BC8DD1DB262C1A57001D2579 /* UITableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		BC8DD203262CE301001D2579 /* RadixTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixTree.swift; sourceTree = "<group>"; };
+		BC8DD233262DF4EA001D2579 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		BCD1625A262ACE1B002D0B02 /* Backbase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Backbase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCD1625D262ACE1B002D0B02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BCD1625F262ACE1B002D0B02 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,10 +65,8 @@
 		BCD162A9262AD985002D0B02 /* LocationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsManager.swift; sourceTree = "<group>"; };
 		BCD162B5262ADD35002D0B02 /* cities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cities.json; sourceTree = "<group>"; };
 		BCD162BA262ADFBF002D0B02 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		BCD162C0262AE605002D0B02 /* BinaryTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryTree.swift; sourceTree = "<group>"; };
-		BCD162C8262AE613002D0B02 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		BCD162C8262AE613002D0B02 /* RadixNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixNode.swift; sourceTree = "<group>"; };
 		BCE2074B262B03CA00ECB973 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
-		BCE20754262B16A500ECB973 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,8 +188,7 @@
 		BCD162BF262AE5EC002D0B02 /* Binary Tree */ = {
 			isa = PBXGroup;
 			children = (
-				BCD162C0262AE605002D0B02 /* BinaryTree.swift */,
-				BCD162C8262AE613002D0B02 /* Node.swift */,
+				BCD162C8262AE613002D0B02 /* RadixNode.swift */,
 				BC8DD203262CE301001D2579 /* RadixTree.swift */,
 			);
 			path = "Binary Tree";
@@ -200,8 +197,8 @@
 		BCE20753262B169B00ECB973 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				BCE20754262B16A500ECB973 /* String+Extensions.swift */,
 				BC8DD1DB262C1A57001D2579 /* UITableViewCell+Extensions.swift */,
+				BC8DD233262DF4EA001D2579 /* Array+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -336,16 +333,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCD162C1262AE605002D0B02 /* BinaryTree.swift in Sources */,
-				BCE20755262B16A500ECB973 /* String+Extensions.swift in Sources */,
 				BC8DD1DC262C1A57001D2579 /* UITableViewCell+Extensions.swift in Sources */,
 				BCD16262262ACE1B002D0B02 /* LocationsViewController.swift in Sources */,
 				BCD16298262AD265002D0B02 /* LocationsSearchResultsController.swift in Sources */,
 				BCE2074C262B03CA00ECB973 /* LoadingViewController.swift in Sources */,
 				BC8DD204262CE301001D2579 /* RadixTree.swift in Sources */,
-				BCD162C9262AE613002D0B02 /* Node.swift in Sources */,
+				BCD162C9262AE613002D0B02 /* RadixNode.swift in Sources */,
 				BCD162AA262AD985002D0B02 /* LocationsManager.swift in Sources */,
 				BCD1625E262ACE1B002D0B02 /* AppDelegate.swift in Sources */,
+				BC8DD234262DF4EA001D2579 /* Array+Extensions.swift in Sources */,
 				BCD162A3262AD821002D0B02 /* Locations.swift in Sources */,
 				BCD16260262ACE1B002D0B02 /* SceneDelegate.swift in Sources */,
 				BCD162BB262ADFBF002D0B02 /* MapViewController.swift in Sources */,

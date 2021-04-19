@@ -13,10 +13,6 @@ struct Location: Codable {
     let id: Int
     let coordinates: Coordinates
 
-    /// TODO: remove this variable and refactor out of the codebase -  we now use DisplayName and there's no need for this
-    /// A normalized key to use for searching, this is not guaranteed to be unique
-    let key: String
-
     /// A 'name' string to display to humans (helper for table cells, titles, etc)
     let displayName: String
 
@@ -27,7 +23,6 @@ struct Location: Codable {
         id = try container.decode(Int.self, forKey: .id)
         coordinates = try container.decode(Coordinates.self, forKey: .coordinates)
 
-        key = "\(name),\(country)".normalizeForSearch()
         displayName = "\(name), \(country)"
     }
 

@@ -27,9 +27,7 @@ class LocationsManager {
     /// Path on disk to the cached data source
     var cachedPath: URL
 
-    /// A binary search tree to optimize location searches
-    private var tree = SearchTree()
-
+    /// A radix binary search tree to optimize location searches
     private var radixTree = RadixTree()
 
     
@@ -45,7 +43,7 @@ class LocationsManager {
 
             #if DEBUG
             let diff = CFAbsoluteTimeGetCurrent() - start
-            print("Generated tree of \(tree.count) nodes in \(diff) seconds")
+            print("Generated tree of \(radixTree.count) nodes in \(diff) seconds")
             #endif
 
             delegate?.locationsDidUpdate(locations)
@@ -104,6 +102,9 @@ class LocationsManager {
         print("search took \(diff) seconds")
         #endif
 
+        // TODO: this shouldn't be necersarry to sort (sorted in tree).... but it is - why?
+        // Are the children node sorted properly when being inserted? Probably not as it relies on the value and not the full key.
+        // Is walking the children 
         let locations = self.radixTree.getReachingLocationsFromNode(node).sorted()
         return locations
     }
@@ -130,7 +131,7 @@ class LocationsManager {
             // (basically negligable, but every little helps)
             do {
                 var locations = try self.decodeLocations(atURL: self.defaultPath)
-                locations.sort { $0.key < $1.key }
+                locations.sort { $0.displayName < $1.displayName }
 
                 DispatchQueue.main.async {
                     completionHandler(locations)

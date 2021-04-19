@@ -7,55 +7,18 @@
 
 import Foundation
 
-class RadixNode {
-    weak var parent: RadixNode?
-    var children: [RadixNode]
-    var value: String
-    var locations: Locations?
-
-    convenience init(value: String, child: RadixNode, parent: RadixNode? = nil) {
-        self.init(value, children: [child], parent: parent)
-    }
-
-    init(_ value: String, children: [RadixNode] = [], parent: RadixNode? = nil) {
-        self.children = children
-        self.parent = parent
-        self.value = value
-
-        for child in children {
-            child.parent = self
-        }
-    }
-
-    public func insertChild(_ child: RadixNode) {
-        // TODO: sort children when inserting
-    }
-
-    public func insertChildren(_ children: [RadixNode]) {
-        // TODO: sort children when inserting
-    }
-
-    public func insertLocation(_ location: Location) {
-        // TODO: sort locations when inserting
-        locations == nil ? locations = [location] : locations!.append(location)
-    }
-
-    public func insertLocations(_ locations: Locations?) {
-        // TODO: sort locations when inserting
-        guard let locationsToInsert = locations else { return }
-        self.locations == nil ? self.locations = locationsToInsert : self.locations!.append(contentsOf: locationsToInsert)
-    }
-}
-
 class RadixTree {
     var root: RadixNode
+
+    #if DEBUG
+    var count = 1
+    #endif
 
     init() {
         root = RadixNode("")
     }
 
     public func insert(_ location: Location) {
-        // TODO: Optimizations - insert in sorted order so we can stop sorting
         let key = location.displayName.lowercased()
 
         if key.isEmpty { return }
@@ -70,7 +33,10 @@ class RadixTree {
             if node.children.isEmpty {
             let child = RadixNode(prefix, parent: node)
                 child.insertLocation(location)
-                node.children.append(child)
+                node.insertChild(child)
+                #if DEBUG
+                count += 1
+                #endif
                 return
             }
 
@@ -108,8 +74,12 @@ class RadixTree {
                     child.locations = nil
 
                     child.value = commonPrefix
-                    child.children.append(firstChildNode)
-                    child.children.append(secondChildNode)
+                    child.insertChild(firstChildNode)
+                    child.insertChild(secondChildNode)
+
+                    #if DEBUG
+                    count += 2
+                    #endif
 
                     return
                 }
@@ -119,7 +89,12 @@ class RadixTree {
             if !found {
                 let newChild = RadixNode(prefix, parent: node)
                 newChild.insertLocation(location)
-                node.children.append(newChild)
+                node.insertChild(newChild)
+
+                #if DEBUG
+                count += 1
+                #endif
+
                 return
             }
         }
