@@ -30,6 +30,8 @@ class LocationsManager {
     /// A binary search tree to optimize location searches
     private var tree = SearchTree()
 
+    private var radixTree = RadixTree()
+
     
     var locations: Locations = [] {
         didSet {
@@ -38,8 +40,10 @@ class LocationsManager {
             #endif
 
             // Clear and repopulate the tree
-            tree = SearchTree()
-            locations.forEach { tree.insert($0) }
+            radixTree = RadixTree()
+            locations.forEach { radixTree.insert($0) }
+//            tree = SearchTree()
+//            locations.forEach { tree.insert($0) }
 
             #if DEBUG
             let diff = CFAbsoluteTimeGetCurrent() - start

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BC8DD1DC262C1A57001D2579 /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8DD1DB262C1A57001D2579 /* UITableViewCell+Extensions.swift */; };
+		BC8DD204262CE301001D2579 /* RadixTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8DD203262CE301001D2579 /* RadixTree.swift */; };
 		BCD1625E262ACE1B002D0B02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1625D262ACE1B002D0B02 /* AppDelegate.swift */; };
 		BCD16260262ACE1B002D0B02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1625F262ACE1B002D0B02 /* SceneDelegate.swift */; };
 		BCD16262262ACE1B002D0B02 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD16261262ACE1B002D0B02 /* LocationsViewController.swift */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		BC8DD1DB262C1A57001D2579 /* UITableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extensions.swift"; sourceTree = "<group>"; };
+		BC8DD203262CE301001D2579 /* RadixTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixTree.swift; sourceTree = "<group>"; };
 		BCD1625A262ACE1B002D0B02 /* Backbase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Backbase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCD1625D262ACE1B002D0B02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BCD1625F262ACE1B002D0B02 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 			children = (
 				BCD162C0262AE605002D0B02 /* BinaryTree.swift */,
 				BCD162C8262AE613002D0B02 /* Node.swift */,
+				BC8DD203262CE301001D2579 /* RadixTree.swift */,
 			);
 			path = "Binary Tree";
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 				BCD16262262ACE1B002D0B02 /* LocationsViewController.swift in Sources */,
 				BCD16298262AD265002D0B02 /* LocationsSearchResultsController.swift in Sources */,
 				BCE2074C262B03CA00ECB973 /* LoadingViewController.swift in Sources */,
+				BC8DD204262CE301001D2579 /* RadixTree.swift in Sources */,
 				BCD162C9262AE613002D0B02 /* Node.swift in Sources */,
 				BCD162AA262AD985002D0B02 /* LocationsManager.swift in Sources */,
 				BCD1625E262ACE1B002D0B02 /* AppDelegate.swift in Sources */,
