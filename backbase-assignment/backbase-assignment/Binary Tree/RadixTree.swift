@@ -61,6 +61,7 @@ class RadixTree {
                 // The child matches the prefix we're looking for, recurse into the children to find the next match
                 if commonPrefix == child.value {
                     node = child
+                    // Drop the common prefix from the rest prefix string
                     prefix = String(prefix[prefix.index(prefix.startIndex, offsetBy: (commonPrefix.count))...])
                     found = true
                     break // break out of child search, not the while loop
@@ -75,7 +76,7 @@ class RadixTree {
                     // Get the prefix for the 'first' child
                     let firstChildValue = String(child.value[child.value.index(child.value.startIndex, offsetBy: (commonPrefix.count))...])
 
-                    // Create the 'first' node, this is a near replica of the current node, with the updated prefxi
+                    // Create the 'first' node, this is a near replica of the current node, with the updated prefix
                     let firstChildNode = RadixNode(firstChildValue, children: child.children, parent: child)
                     child.children.removeAll()
 

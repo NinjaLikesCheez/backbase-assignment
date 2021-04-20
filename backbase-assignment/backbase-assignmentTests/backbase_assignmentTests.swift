@@ -133,7 +133,7 @@ class backbase_assignmentTests: XCTestCase {
         )
 
         let locationTwo = Location(
-            name: "Londonderry", country: "GB", id: 12345, coordinates: Location.Coordinates(longitude: 1234, latitude: 1234)
+            name: "Londonderry", country: "GB", id: 54321, coordinates: Location.Coordinates(longitude: 1234, latitude: 1234)
         )
 
         tree.insert(locationOne)
@@ -147,19 +147,28 @@ class backbase_assignmentTests: XCTestCase {
         XCTAssertEqual(tree.root.children.count, 1) // One node is expected, any more and we've not split the prefix correctly
         XCTAssertEqual(tree.root.children[0].value, "london") // test prefix splitting and insertion works
         XCTAssertEqual(tree.root.children[0].children[0].locations![0], locationOne)
-        XCTAssertEqual(tree.root.children[0].children[1].locations![0], locationOne)
+        XCTAssertEqual(tree.root.children[0].children[1].locations![0], locationTwo)
     }
 
     func testTreePerformance() throws {
-        // This is an example of a performance test case.
         self.measure {
-            // Put the code you want to measure the time of here.
-            let _ = manager.search("Amsterdam")
-
+            let _ = manager.search("A")
         }
     }
 
     func testFilterPerformance() throws {
+        self.measure {
+            let _ = manager.locations.filter { $0.displayName.lowercased().hasPrefix("A".lowercased())}.sorted()
+        }
+    }
+
+    func testTreeLongSearchPerformance() throws {
+        self.measure {
+            let _ = manager.search("Amsterdam")
+        }
+    }
+
+    func testFilterLongSearchPerformance() throws {
         self.measure {
             let _ = manager.locations.filter { $0.displayName.lowercased().hasPrefix("Amsterdam".lowercased())}.sorted()
         }

@@ -35,7 +35,7 @@ struct Location: Codable {
         displayName = "\(name), \(country)"
     }
 
-    struct Coordinates: Codable {
+    struct Coordinates: Codable, Equatable {
         let longitude: Double
         let latitude: Double
 
@@ -72,7 +72,11 @@ struct Location: Codable {
 
 extension Location: Comparable {
     static func == (lhs: Location, rhs: Location) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id &&
+        lhs.name == rhs.name &&
+        lhs.country == rhs.country &&
+        lhs.id == rhs.id &&
+        lhs.coordinates == rhs.coordinates
     }
 
     static func < (lhs: Location, rhs: Location) -> Bool {
