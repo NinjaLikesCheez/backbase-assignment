@@ -15,6 +15,7 @@ protocol LocationsManagerDelegate: AnyObject {
 
 class LocationsManager {
     static let instance = LocationsManager()
+
     static private let fileName = "cities"
     static private let sortedFileName = "\(LocationsManager.fileName)-sorted"
     static private let fileExtension = "json"
@@ -30,7 +31,7 @@ class LocationsManager {
     /// A radix binary search tree to optimize location searches
     private var radixTree = RadixTree()
 
-    
+    /// The locations the manager currently has
     var locations: Locations = [] {
         didSet {
             #if DEBUG
@@ -90,6 +91,7 @@ class LocationsManager {
     }
 
     // MARK: - Public Functions
+    /// Searches the location manager for `Locations` matching the key
     public func search(_ key: String) -> Locations {
         #if DEBUG
         let start = CFAbsoluteTimeGetCurrent()

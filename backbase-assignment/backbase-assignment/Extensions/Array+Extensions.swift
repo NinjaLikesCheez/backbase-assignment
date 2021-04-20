@@ -14,12 +14,15 @@ extension Array {
         var end = endIndex
 
         while begin != end {
+            // get the 'middle' of the slice we're inspecting
             let offset = distance(from: begin, to: end) / 2
             let middle = index(begin, offsetBy: offset)
 
+            // if sort is true, shift the the slice 'up' the array
             if sort(self[middle]) {
                 begin = index(after: middle)
             } else {
+                // else, shift the end of the slice 'down' the array
                 end = middle
             }
         }

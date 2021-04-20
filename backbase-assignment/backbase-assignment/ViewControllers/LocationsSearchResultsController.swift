@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// A table view to show `Location` results
+/// A table view to show search results
 class LocationsSearchResultsController: UITableViewController {
     /// The data models for this table view
     var results: Locations = [] {

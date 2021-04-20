@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 
+/// A view that shows a `Location` on a map
 class MapViewController: UIViewController {
     private let mapView: MKMapView = {
         let mapView = MKMapView()

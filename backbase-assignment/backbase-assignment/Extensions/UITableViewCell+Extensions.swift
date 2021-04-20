@@ -10,7 +10,7 @@ import UIKit
 extension UITableViewCell {
     /// Configures a cell to display a location
     ///
-    /// - Note: Normally I'd _never_ do this in a code base and would instead create a cell. However, this project only relies on one cell and has a tight scope
+    /// - Note: Normally I'd _never_ do this in a code base and would instead create a cell subclass. However, this project only relies on one cell and has a tight scope
     func configureLocationCell(_ location: Location) {
         let text = location.displayName
         let secondaryText = location.coordinates.displayName

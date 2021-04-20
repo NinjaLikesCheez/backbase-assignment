@@ -7,10 +7,13 @@
 
 import Foundation
 
+/// A Radix-style binary search tree
 class RadixTree {
+    /// The 'matriarch' of the tree (i.e. the head of the tree)
     var root: RadixNode
 
     #if DEBUG
+    /// The number of nodes in this tree - useful for debugging tree sizes
     var count = 1
     #endif
 
@@ -18,29 +21,35 @@ class RadixTree {
         root = RadixNode("")
     }
 
+    /// Inserts a location into the tree, using the display name as the key
     public func insert(_ location: Location) {
         let key = location.displayName.lowercased()
-
         if key.isEmpty { return }
 
+        // the active node we're inspecting
         var node = root
+        // as we parse through the tree, this will become shorter as we find common prefixes with other nodes
+        // essentially, it represents the unprocessed parts of the key
         var prefix = key
 
         while true {
             var found = false
 
-            // Node has no children, create one and attach it
+            // Node has no children, create a child and attach it to the current node
             if node.children.isEmpty {
-            let child = RadixNode(prefix, parent: node)
+                let child = RadixNode(prefix, parent: node)
                 child.insertLocation(location)
                 node.insertChild(child)
+
                 #if DEBUG
                 count += 1
                 #endif
+
                 return
             }
 
             for child in node.children {
+                // i.e. 'aachen' & 'aach' have 'aach' as the common prefix
                 let commonPrefix = (prefix as NSString).commonPrefix(with: child.value)
 
                 // prefix is already in tree
@@ -49,21 +58,27 @@ class RadixTree {
                     return
                 }
 
-                // Down the rabbit hole, there's already a child for this prefix - go into the children
+                // The child matches the prefix we're looking for, recurse into the children to find the next match
                 if commonPrefix == child.value {
                     node = child
                     prefix = String(prefix[prefix.index(prefix.startIndex, offsetBy: (commonPrefix.count))...])
                     found = true
-                    break // break out of child search
+                    break // break out of child search, not the while loop
                 }
 
-                // Time to crack this node into two
+                // Here, we have a common prefix that doesn't exactly match the child but isn't empty
+                // We need to crack the node into two, and attach those two nodes to the current node (updating it's prefix)
+                // and locations
                 if !commonPrefix.isEmpty {
+                    // Get the updated prefix to use for the 'second' child
                     prefix = String(prefix[prefix.index(prefix.startIndex, offsetBy: (commonPrefix.count))...])
-                    child.value = String(child.value[child.value.index(child.value.startIndex, offsetBy: (commonPrefix.count))...])
+                    // Get the prefix for the 'first' child
+                    let firstChildValue = String(child.value[child.value.index(child.value.startIndex, offsetBy: (commonPrefix.count))...])
 
-                    let firstChildNode = RadixNode(child.value, children: child.children, parent: child)
+                    // Create the 'first' node, this is a near replica of the current node, with the updated prefxi
+                    let firstChildNode = RadixNode(firstChildValue, children: child.children, parent: child)
                     child.children.removeAll()
+
                     let secondChildNode = RadixNode(prefix, parent: child)
 
                     // Move locations from the child node to the first node
@@ -100,6 +115,7 @@ class RadixTree {
         }
     }
 
+    /// Searches a tree for a key, returning the node that represents the key
     public func search(_ key: String) -> RadixNode {
         if key.isEmpty { return RadixNode("") }
 
@@ -141,6 +157,8 @@ class RadixTree {
 }
 
 extension RadixTree {
+    /// Gets a list of locations for a given node
+    /// - Note: if the node has locations, those will be returned. Otherwise, we will do a postfix traversal of the node's children getting all locations
     public func getReachingLocationsFromNode(_ node: RadixNode) -> Locations {
         var results: Locations
 

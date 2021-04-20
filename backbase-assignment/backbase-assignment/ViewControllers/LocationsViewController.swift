@@ -24,8 +24,10 @@ class LocationsViewController: UITableViewController {
         return loadingViewController
     }()
 
+    /// The data provider for this view
     private let manager = LocationsManager.instance
 
+    /// The data models for this table view
     private var locations: Locations = [] {
         didSet {
             tableView.reloadData()

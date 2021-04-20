@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// A view to show the user while we're processing the initial data
 class LoadingViewController: UIViewController {
     private let activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
