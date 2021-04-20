@@ -102,10 +102,7 @@ class LocationsManager {
         print("search took \(diff) seconds")
         #endif
 
-        // TODO: this shouldn't be necersarry to sort (sorted in tree).... but it is - why?
-        // Are the children node sorted properly when being inserted? Probably not as it relies on the value and not the full key.
-        // Is walking the children 
-        let locations = self.radixTree.getReachingLocationsFromNode(node).sorted()
+        let locations = self.radixTree.getReachingLocationsFromNode(node)
         return locations
     }
 
