@@ -10,6 +10,8 @@
 		BC8DD1DC262C1A57001D2579 /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8DD1DB262C1A57001D2579 /* UITableViewCell+Extensions.swift */; };
 		BC8DD204262CE301001D2579 /* RadixTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8DD203262CE301001D2579 /* RadixTree.swift */; };
 		BC8DD234262DF4EA001D2579 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8DD233262DF4EA001D2579 /* Array+Extensions.swift */; };
+		BC8DD23E262ED4FE001D2579 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BC8DD23C262ED4FE001D2579 /* README.md */; };
+		BC8DD23F262ED4FE001D2579 /* Instructions for the test.md in Resources */ = {isa = PBXBuildFile; fileRef = BC8DD23D262ED4FE001D2579 /* Instructions for the test.md */; };
 		BCD1625E262ACE1B002D0B02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1625D262ACE1B002D0B02 /* AppDelegate.swift */; };
 		BCD16260262ACE1B002D0B02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1625F262ACE1B002D0B02 /* SceneDelegate.swift */; };
 		BCD16262262ACE1B002D0B02 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD16261262ACE1B002D0B02 /* LocationsViewController.swift */; };
@@ -47,6 +49,8 @@
 		BC8DD1DB262C1A57001D2579 /* UITableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		BC8DD203262CE301001D2579 /* RadixTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixTree.swift; sourceTree = "<group>"; };
 		BC8DD233262DF4EA001D2579 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		BC8DD23C262ED4FE001D2579 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../README.md; sourceTree = "<group>"; };
+		BC8DD23D262ED4FE001D2579 /* Instructions for the test.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "Instructions for the test.md"; path = "../../../Instructions for the test.md"; sourceTree = "<group>"; };
 		BCD1625A262ACE1B002D0B02 /* Backbase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Backbase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCD1625D262ACE1B002D0B02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BCD1625F262ACE1B002D0B02 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +98,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC8DD23B262ED4EF001D2579 /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				BC8DD23D262ED4FE001D2579 /* Instructions for the test.md */,
+				BC8DD23C262ED4FE001D2579 /* README.md */,
+			);
+			path = Docs;
+			sourceTree = "<group>";
+		};
 		BCD16251262ACE1B002D0B02 = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +130,7 @@
 		BCD1625C262ACE1B002D0B02 /* backbase-assignment */ = {
 			isa = PBXGroup;
 			children = (
+				BC8DD23B262ED4EF001D2579 /* Docs */,
 				BCE20753262B169B00ECB973 /* Extensions */,
 				BCD162BF262AE5EC002D0B02 /* Binary Tree */,
 				BCD162B4262ADD18002D0B02 /* Data */,
@@ -308,6 +322,8 @@
 			files = (
 				BCD162B6262ADD35002D0B02 /* cities.json in Resources */,
 				BCD1626A262ACE1D002D0B02 /* LaunchScreen.storyboard in Resources */,
+				BC8DD23E262ED4FE001D2579 /* README.md in Resources */,
+				BC8DD23F262ED4FE001D2579 /* Instructions for the test.md in Resources */,
 				BCD16267262ACE1D002D0B02 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

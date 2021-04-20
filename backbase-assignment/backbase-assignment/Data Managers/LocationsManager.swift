@@ -101,7 +101,7 @@ class LocationsManager {
 
         #if DEBUG
         let diff = CFAbsoluteTimeGetCurrent() - start
-        print("search took \(diff) seconds")
+        print("search for '\(key)' took \(diff) seconds")
         #endif
 
         let locations = self.radixTree.getReachingLocationsFromNode(node)
