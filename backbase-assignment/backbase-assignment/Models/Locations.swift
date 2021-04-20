@@ -16,6 +16,15 @@ struct Location: Codable {
     /// A 'name' string to display to humans (helper for table cells, titles, etc)
     let displayName: String
 
+    public init(name: String, country: String, id: Int, coordinates: Coordinates) {
+        self.name = name
+        self.country = country
+        self.id = id
+        self.coordinates = coordinates
+
+        self.displayName = "\(name), \(country)"
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         country = try container.decode(String.self, forKey: .country)
@@ -32,6 +41,13 @@ struct Location: Codable {
 
         /// A 'coordinated' string to display to humans (helper for table cells etc)
         let displayName: String
+
+        public init(longitude: Double, latitude: Double) {
+            self.longitude = longitude
+            self.latitude = latitude
+
+            self.displayName = "(\(latitude), \(longitude))"
+        }
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)

@@ -110,7 +110,8 @@ class backbase_assignmentTests: XCTestCase {
             "          ",
             "-*()",
             "thisIsABadSearch",
-            "WWQAD(WhatWouldQADo)"
+            "WWQAD(WhatWouldQADo)",
+            "L o n d o n"
         ]
 
         for searchText in searchTerms {
@@ -118,11 +119,35 @@ class backbase_assignmentTests: XCTestCase {
 
             XCTAssert(results.isEmpty)
 
-            // Test against known filtering method - we don't normalize the search text in this case
+            // Test against known filtering method
             let filteredResults = getFilteredResults(manager.locations, searchTerm: searchText)
 
             XCTAssert(filteredResults.isEmpty)
         }
+    }
+
+    func testTreeInsertion() throws {
+        let tree = RadixTree()
+        let locationOne = Location(
+            name: "London", country: "GB", id: 12345, coordinates: Location.Coordinates(longitude: 1234, latitude: 1234)
+        )
+
+        let locationTwo = Location(
+            name: "Londonderry", country: "GB", id: 12345, coordinates: Location.Coordinates(longitude: 1234, latitude: 1234)
+        )
+
+        tree.insert(locationOne)
+
+        XCTAssertEqual(tree.root.children.count, 1)
+        XCTAssertEqual(tree.root.children[0].value, "london, gb") // values are lowercased
+        XCTAssertEqual(tree.root.children[0].locations![0], locationOne)
+
+        tree.insert(locationTwo)
+
+        XCTAssertEqual(tree.root.children.count, 1) // One node is expected, any more and we've not split the prefix correctly
+        XCTAssertEqual(tree.root.children[0].value, "london") // test prefix splitting and insertion works
+        XCTAssertEqual(tree.root.children[0].children[0].locations![0], locationOne)
+        XCTAssertEqual(tree.root.children[0].children[1].locations![0], locationOne)
     }
 
     func testTreePerformance() throws {

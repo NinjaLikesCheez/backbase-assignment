@@ -54,6 +54,8 @@ extension LocationsSearchResultsController {
         let result = results[indexPath.row]
         let viewController = MapViewController(result)
 
+        deselectSelectedRow()
+
         presentingViewController?.navigationController?.pushViewController(viewController, animated: true)
     }
 }
